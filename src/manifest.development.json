@@ -1,0 +1,31 @@
+{
+    "manifest_version": 3,
+    "name": "Twtter-Green-Plugs",
+    "description": "chrome extension",
+    "version": "0.1.0",
+    "background": {
+        "service_worker": "/background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "run_at": "document_end",
+            "matches": [
+                "*://twitter.com/*"
+            ],
+            "js": [
+                "/content.js"
+            ]
+        }
+    ],
+    "host_permissions": [
+        "*://twitter.com/*"
+    ],
+    "permissions": [
+        "cookies",
+        "storage"
+    ],
+    "options_page": "options.html"
+}
