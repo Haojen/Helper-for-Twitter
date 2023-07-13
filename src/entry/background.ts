@@ -1,11 +1,13 @@
+import {Message} from "@/shared.const";
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log('background message recive', message)
-    if (message.type === 'message.cookie.nightmode') {
-        updateTweetTheme()
+    if (message.type === Message.themeControl) {
+        updateTweetTheme(message.value)
     }
 })
 
-function updateTweetTheme() {
+function updateTweetTheme(value: string) {
     chrome.cookies.get({
         name: 'night_mode',
         url: 'https://twitter.com',
@@ -13,7 +15,7 @@ function updateTweetTheme() {
         console.log(res, 'cookie')
 
         if (!res) return
-        res.value = '1'
+
         chrome.cookies.set({
             domain: res.domain,
             expirationDate: res.expirationDate,
@@ -24,7 +26,7 @@ function updateTweetTheme() {
             secure: res.secure,
             storeId: res.storeId,
             url: 'https://twitter.com',
-            value: '1'
+            value: value
         })
     })
 }
