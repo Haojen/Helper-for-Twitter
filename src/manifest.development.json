@@ -3,9 +3,6 @@
     "name": "Twtter-Green-Plugs",
     "description": "chrome extension",
     "version": "0.1.0",
-    "background": {
-        "service_worker": "/background.js"
-    },
     "action": {
         "default_popup": "popup.html"
     },
@@ -24,7 +21,6 @@
         "*://twitter.com/*"
     ],
     "permissions": [
-        "cookies",
         "storage"
     ],
     "options_page": "options.html"

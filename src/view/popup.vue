@@ -38,26 +38,8 @@ a {
             <span style="color: grey;">Version: 0.1.0</span>
         </header>
         <section>
-            <span>主题颜色</span>
-            <select v-model="config.themeMode">
-                <option value="followSystem">Follow System</option>
-                <option value="0">White</option>
-                <option value="1">Blue</option>
-                <option value="2">Dark</option>
-            </select>
-        </section>
-        <Transition name="fade">
-            <section v-if="config.themeMode === 'followSystem'">
-                <span>暗色主题</span>
-                <select v-model="config.darkMode">
-                    <option value="1">Deep Blue</option>
-                    <option value="2">Black</option>
-                </select>
-            </section>
-        </Transition>
-        <section>
             <span>显示一键 Block 按钮</span>
-            <input type="checkbox" value="x">
+            <input type="checkbox" v-model="config.quickBlock">
         </section>
         <section>
             <span>隐藏机器人回复</span>

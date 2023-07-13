@@ -1,52 +1,15 @@
-import {defaultStaticConfig, ThemeType} from "@/shared.config";
-import {Message} from "@/shared.const";
+import {defaultStaticConfig} from "@/shared.config";
 export interface IFeatures {
     config: typeof defaultStaticConfig
     init: () => void
     updated: () => void
     destroy: () => void
 }
-export class ThemeControl implements IFeatures {
-    config: typeof defaultStaticConfig
-    private mediaScheme = window.matchMedia('(prefers-color-scheme: dark)')
-
-    constructor(config: typeof defaultStaticConfig) {
-        this.config = config
-    }
-
-    listener(event: MediaQueryListEvent) {
-        this.setThemeCookie(event.matches ? this.config.darkMode : ThemeType.White)
-    }
-
-    private setThemeCookie(type: ThemeType) {
-        const messageBody = {
-            type: Message.themeControl, value: type
-        }
-        chrome.runtime.sendMessage(messageBody)
-    }
-    init() {
-        this.destroy()
-
-        if (this.config.themeMode === ThemeType.FollowSystem) {
-            this.setThemeCookie(this.mediaScheme.matches ? this.config.darkMode : ThemeType.White)
-
-            this.mediaScheme.addEventListener('change', this.listener)
-
-            return
-        }
-
-        this.setThemeCookie(this.config.themeMode)
-    }
-    updated() {
-        this.init()
-    }
-    destroy() {
-        this.mediaScheme.removeEventListener('change', this.listener)
-    }
-}
 
 export class QuickBlock implements IFeatures {
     config: typeof defaultStaticConfig
+    INSERT_STATUS_FLAG = 'TW_HELPER_INSERT_STATUS_FLAG'
+    INSERT_BLOCK_BUTTON_FLAG = 'TW_HELPER_INSERT_BLOCK_BUTTON_FLAG'
     observeNewTweet = new MutationObserver( () => this.injectMenu())
 
     constructor(props: typeof defaultStaticConfig) {
@@ -55,6 +18,7 @@ export class QuickBlock implements IFeatures {
 
     createCustomMenuBottom(tweetItem: HTMLElement): HTMLElement {
         const button = document.createElement('button')
+        button.className = this.INSERT_BLOCK_BUTTON_FLAG
         button.innerText = "Block"
 
         button.onclick = () => {
@@ -74,12 +38,11 @@ export class QuickBlock implements IFeatures {
     appendCustomFooterMenuItem(tweetItem: HTMLElement) {
         const sharedTweetIcon = `M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z`
 
-        const INSERT_STATUS_FLAG = 'twGreenInsertStatusFlag'
         const sharedTweetIconEl = this.findButtonByIconPath(tweetItem, sharedTweetIcon)
 
-        if (!sharedTweetIconEl || sharedTweetIconEl.dataset[INSERT_STATUS_FLAG] === "yes") return;
+        const button = tweetItem.querySelector(`.${this.INSERT_BLOCK_BUTTON_FLAG}`)
 
-        sharedTweetIconEl.dataset[INSERT_STATUS_FLAG] = "yes"
+        if (!sharedTweetIconEl || button) return;
 
         sharedTweetIconEl.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.appendChild(this.createCustomMenuBottom(tweetItem))
     }
@@ -125,9 +88,17 @@ export class QuickBlock implements IFeatures {
         })
     }
     updated() {
-        this.config.quickBlock ? this.init() : this.destroy()
+        if (this.config.quickBlock) {
+            this.init()
+            this.injectMenu()
+        }
+        else {
+            this.destroy()
+        }
     }
     destroy() {
         this.observeNewTweet.disconnect()
+
+        document.body.querySelectorAll(`.${this.INSERT_BLOCK_BUTTON_FLAG}`).forEach(buttonItem => buttonItem.remove())
     }
 }
