@@ -39,15 +39,15 @@ a {
         </header>
         <section>
             <span>显示一键 Block 按钮</span>
-            <input type="checkbox" v-model="config.quickBlock">
+            <input type="checkbox" v-model="config.quickBlockTweet">
         </section>
         <section>
             <span>隐藏机器人回复</span>
-            <input type="checkbox" value="ss">
+            <input type="checkbox" v-model="config.hiddenAutoBotTweet">
         </section>
         <section>
             <span>隐藏推广信息</span>
-            <input type="checkbox" value="x">
+            <input type="checkbox" v-model="config.hiddenPromotedTweet">
         </section>
         <footer style="margin-top: 20px;">
             <a href="https://github.com/haojen">Github</a>

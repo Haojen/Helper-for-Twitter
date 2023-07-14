@@ -1,33 +1,31 @@
-import {defaultStaticConfig, getDefaultStaticConfig} from "@/shared.config";
-import {IFeatures, QuickBlock} from "@/entry/content.features";
+import {defaultStaticConfig, getDefaultStaticConfig, IDefaultStaticConfigKeys} from "@/shared.config";
+import {HiddenPromotedTweet, IFeatures, QuickBlockTweet} from "@/entry/content.features";
 
 export class HelperKit {
     config: typeof defaultStaticConfig
-    features: { [k in 'quickBlock']: IFeatures }
+    features: { [k in IDefaultStaticConfigKeys ]: IFeatures }
     constructor() {
         this.config = getDefaultStaticConfig()
         this.features = {
-            quickBlock: new QuickBlock(this.config),
+            quickBlockTweet: new QuickBlockTweet(this.config),
+            hiddenPromotedTweet: new HiddenPromotedTweet(this.config)
         }
     }
 
-    updateConfig(storageChange: { [p: string]: chrome.storage.StorageChange }) {
+    updateConfig(storageChange: { [p in IDefaultStaticConfigKeys]: chrome.storage.StorageChange }) {
+        const keys= Object.keys(storageChange) as IDefaultStaticConfigKeys[]
 
-        for (const [k,v] of Object.entries(storageChange)) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            this.config[k] = v.newValue
-        }
+        keys.forEach( changeItem => {
+            this.config[changeItem] = storageChange[changeItem].newValue
+            this.features[changeItem].updated()
+        })
 
-        if (storageChange.quickBlock) {
-            this.features.quickBlock.updated()
-            return;
-        }
     }
     init(config: typeof defaultStaticConfig) {
         Object.assign(this.config, config)
 
-        this.config.quickBlock && this.features.quickBlock.init()
+        this.config.quickBlockTweet && this.features.quickBlockTweet.init()
+        this.config.hiddenPromotedTweet && this.features.hiddenPromotedTweet.init()
     }
 }
 
@@ -37,6 +35,5 @@ chrome.storage.sync.get(getDefaultStaticConfig(), (storageData) => {
 })
 
 chrome.storage.onChanged.addListener((changes) => {
-    console.log(changes)
-    helperKit.updateConfig(changes)
+    helperKit.updateConfig(changes as { [p in IDefaultStaticConfigKeys]: chrome.storage.StorageChange } )
 })

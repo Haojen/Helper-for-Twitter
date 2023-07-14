@@ -1,8 +1,8 @@
-export type IDefaultStaticConfigKeys = 'quickBlock' | 'hiddenAutoBotCommit' | 'hiddenPromotedContent'
+export type IDefaultStaticConfigKeys = 'quickBlockTweet' | 'hiddenPromotedTweet' //'hiddenAutoBotTweet'
 export const defaultStaticConfig = {
-    quickBlock: true,
-    hiddenAutoBotCommit: false,
-    hiddenPromotedContent: false
+    quickBlockTweet: true,
+    hiddenAutoBotTweet: false,
+    hiddenPromotedTweet: false
 }
 
 export function getDefaultStaticConfig() {
