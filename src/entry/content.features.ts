@@ -58,9 +58,33 @@ export class QuickBlockTweet extends TweetFilter {
         return el.querySelectorAll('div[aria-haspopup="menu"][role="button"] svg path')
     }
     createCustomMenuBottom(tweetItem: HTMLElement): HTMLElement {
-        const button = document.createElement('button')
+        const button = document.createElement('div')
+        button.setAttribute('role', 'button')
         button.className = this.INSERT_BLOCK_BUTTON_FLAG
-        button.innerText = "Block"
+        button.title = 'Block'
+
+        button.style.width = '33px'
+        button.style.height = '33px'
+        button.style.margin = '-8px 0'
+        button.style.borderRadius = '50%'
+        button.style.display = 'inline-grid'
+        button.style.alignSelf = 'center'
+        button.style.alignItems = 'center'
+        button.style.justifyContent = 'center'
+        button.style.cursor = 'pointer'
+        button.onmouseover = () => {
+            button.style.background = 'rgba(255, 0, 0, 0.15)'
+        }
+        button.onmouseleave = () => {
+            button.style.background = ""
+        }
+
+        const img = document.createElement('img')
+        img.src = chrome.runtime.getURL("block.svg")
+        img.width = 18
+        img.height = 18
+
+        button.appendChild(img)
 
         button.onclick = () => {
             const moreIconButtonPathData = `M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z`

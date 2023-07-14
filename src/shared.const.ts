@@ -1,3 +1,0 @@
-export enum Message {
-    themeControl
-}

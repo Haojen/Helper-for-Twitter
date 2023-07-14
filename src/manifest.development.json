@@ -17,10 +17,13 @@
             ]
         }
     ],
-    "host_permissions": [
-        "*://twitter.com/*"
-    ],
     "permissions": [
         "storage"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["block.svg"],
+            "matches": ["*://twitter.com/*"]
+        }
     ]
 }
