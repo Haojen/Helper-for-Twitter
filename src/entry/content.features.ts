@@ -1,8 +1,6 @@
-import {defaultStaticConfig} from "@/shared.config";
 export interface IFeatures {
-    config: typeof defaultStaticConfig
     init: () => void
-    updated: () => void
+    updated: (enabled: boolean) => void
     destroy: () => void
 }
 
@@ -23,14 +21,39 @@ function findButtonByIconPath(elements: NodeList, iconPathData: string): HTMLEle
     return null;
 }
 
-export class QuickBlockTweet implements IFeatures {
-    config: typeof defaultStaticConfig
-    INSERT_BLOCK_BUTTON_FLAG = 'TW_HELPER_INSERT_BLOCK_BUTTON_FLAG'
-    observeNewTweet = new MutationObserver( () => this.injectMenu())
-    constructor(props: typeof defaultStaticConfig) {
-        this.config = props
+class TweetFilter implements IFeatures {
+    get queryRoot() {
+        return document.body.querySelector('#react-root')
     }
 
+    observeNewTweetCallback?: () => void
+    observeNewTweet = new MutationObserver( () => this.observeNewTweetCallback?.())
+
+    init() {
+        const tweetContent = this.queryRoot
+        tweetContent && this.observeNewTweet.observe(tweetContent, {
+            subtree: true,
+            childList: true
+        })
+    }
+
+    updated(enabled: boolean) {
+        if (enabled) {
+            this.init()
+            this.observeNewTweetCallback?.()
+        }
+        else {
+            this.destroy()
+        }
+    }
+
+    destroy() {
+        this.observeNewTweet.disconnect()
+    }
+}
+
+export class QuickBlockTweet extends TweetFilter {
+    INSERT_BLOCK_BUTTON_FLAG = 'TW_HELPER_INSERT_BLOCK_BUTTON_FLAG'
     getIcon(el: HTMLElement) {
         return el.querySelectorAll('div[aria-haspopup="menu"][role="button"] svg path')
     }
@@ -64,7 +87,7 @@ export class QuickBlockTweet implements IFeatures {
 
         sharedTweetIconEl.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.appendChild(this.createCustomMenuBottom(tweetItem))
     }
-    injectMenu() {
+    observeNewTweetCallback = ()=> {
         const allTweets = document.querySelectorAll(`article[data-testid="tweet"]`)
 
         if (!allTweets || allTweets.length === 0) {
@@ -78,38 +101,14 @@ export class QuickBlockTweet implements IFeatures {
 
         return allTweets
     }
-
-    init() {
-        const tweetContent = document.body.querySelector('#react-root')
-        tweetContent && this.observeNewTweet.observe(tweetContent, {
-            subtree: true,
-            childList: true
-        })
-    }
-    updated() {
-        if (this.config.quickBlockTweet) {
-            this.init()
-            this.injectMenu()
-        }
-        else {
-            this.destroy()
-        }
-    }
     destroy() {
-        this.observeNewTweet.disconnect()
-
+        super.destroy();
         document.body.querySelectorAll(`.${this.INSERT_BLOCK_BUTTON_FLAG}`).forEach(buttonItem => buttonItem.remove())
     }
 }
 
-export class HiddenPromotedTweet implements IFeatures {
-    config
-    observeNewTweet = new MutationObserver( () => this.removePromotedTweet())
-    constructor(props: typeof defaultStaticConfig) {
-        this.config = props
-    }
-
-    removePromotedTweet() {
+export class HiddenPromotedTweet extends TweetFilter {
+    observeNewTweetCallback = () => {
         const iconPath = "M19.498 3h-15c-1.381 0-2.5 1.12-2.5 2.5v13c0 1.38 1.119 2.5 2.5 2.5h15c1.381 0 2.5-1.12 2.5-2.5v-13c0-1.38-1.119-2.5-2.5-2.5zm-3.502 12h-2v-3.59l-5.293 5.3-1.414-1.42L12.581 10H8.996V8h7v7z"
         const allTweets:NodeListOf<HTMLElement> = document.querySelectorAll(`article[data-testid="tweet"]`)
         allTweets.forEach( tweetItem => {
@@ -119,34 +118,22 @@ export class HiddenPromotedTweet implements IFeatures {
                 tweetItem.style.height = "0"
             }
 
-            /*
-            Hidden promoted when click content
+           /* Hidden promoted when click content
             const isPromotedTweet2 = tweetItem.querySelector('div[data-testid="promotedIndicator"]') as HTMLElement
             if (isPromotedTweet2) {
                 tweetItem.remove()
             }*/
         })
     }
+}
 
-    init() {
-        const tweetContent = document.body.querySelector('#react-root')
-        tweetContent && this.observeNewTweet.observe(tweetContent, {
-            subtree: true,
-            childList: true
+export class HiddenAIBotTweet extends TweetFilter {
+    observeNewTweetCallback = () => {
+        const iconPath = 'M.998 15V9h2v6h-2zm22 0V9h-2v6h2zM12 2c-4.418 0-8 3.58-8 8v7c0 2.76 2.239 5 5 5h6c2.761 0 5-2.24 5-5v-7c0-4.42-3.582-8-8-8zM8.998 14c-1.105 0-2-.9-2-2s.895-2 2-2 2 .9 2 2-.895 2-2 2zm6 0c-1.104 0-2-.9-2-2s.895-2 2-2 2 .9 2 2-.896 2-2 2z'
+        const allTweets:NodeListOf<HTMLElement> = document.querySelectorAll(`article[data-testid="tweet"]`)
+        allTweets.forEach( tweetItem => {
+            const isAIBotTweet = findButtonByIconPath(tweetItem.querySelectorAll('svg path'), iconPath)
+            isAIBotTweet && tweetItem.remove()
         })
-    }
-
-    updated() {
-        if (this.config.hiddenPromotedTweet) {
-            this.init()
-            this.removePromotedTweet()
-        }
-        else {
-            this.destroy()
-        }
-    }
-
-    destroy() {
-        this.observeNewTweet.disconnect()
     }
 }

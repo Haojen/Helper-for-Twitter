@@ -1,5 +1,5 @@
 import {defaultStaticConfig, getDefaultStaticConfig, IDefaultStaticConfigKeys} from "@/shared.config";
-import {HiddenPromotedTweet, IFeatures, QuickBlockTweet} from "@/entry/content.features";
+import {HiddenAIBotTweet, HiddenPromotedTweet, IFeatures, QuickBlockTweet} from "@/entry/content.features";
 
 export class HelperKit {
     config: typeof defaultStaticConfig
@@ -7,8 +7,9 @@ export class HelperKit {
     constructor() {
         this.config = getDefaultStaticConfig()
         this.features = {
-            quickBlockTweet: new QuickBlockTweet(this.config),
-            hiddenPromotedTweet: new HiddenPromotedTweet(this.config)
+            quickBlockTweet: new QuickBlockTweet(),
+            hiddenAIBotTweet: new HiddenAIBotTweet(),
+            hiddenPromotedTweet: new HiddenPromotedTweet()
         }
     }
 
@@ -17,15 +18,16 @@ export class HelperKit {
 
         keys.forEach( changeItem => {
             this.config[changeItem] = storageChange[changeItem].newValue
-            this.features[changeItem].updated()
+            this.features[changeItem].updated(this.config[changeItem])
         })
 
     }
-    init(config: typeof defaultStaticConfig) {
-        Object.assign(this.config, config)
+    init(config: {[p in IDefaultStaticConfigKeys]: boolean}) {
+        Object.assign(this.config, config);
 
-        this.config.quickBlockTweet && this.features.quickBlockTweet.init()
-        this.config.hiddenPromotedTweet && this.features.hiddenPromotedTweet.init()
+        (Object.keys(this.config) as IDefaultStaticConfigKeys[]).forEach(featureKey => {
+            this.config[featureKey] && this.features[featureKey].init()
+        })
     }
 }
 

@@ -1,7 +1,7 @@
-export type IDefaultStaticConfigKeys = 'quickBlockTweet' | 'hiddenPromotedTweet' //'hiddenAutoBotTweet'
-export const defaultStaticConfig = {
+export type IDefaultStaticConfigKeys = 'quickBlockTweet' | 'hiddenPromotedTweet' | 'hiddenAIBotTweet'
+export const defaultStaticConfig:{[p in IDefaultStaticConfigKeys]: boolean } = {
     quickBlockTweet: true,
-    hiddenAutoBotTweet: false,
+    hiddenAIBotTweet: false,
     hiddenPromotedTweet: false
 }
 

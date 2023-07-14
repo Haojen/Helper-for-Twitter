@@ -43,7 +43,7 @@ a {
         </section>
         <section>
             <span>隐藏机器人回复</span>
-            <input type="checkbox" v-model="config.hiddenAutoBotTweet">
+            <input type="checkbox" v-model="config.hiddenAIBotTweet">
         </section>
         <section>
             <span>隐藏推广信息</span>
