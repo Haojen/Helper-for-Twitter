@@ -40,6 +40,10 @@ module.exports = {
           {
             from: path.resolve(`public/`),
             to: `${path.resolve('dist')}/`
+          },
+          {
+            from: path.resolve('_locales/'),
+            to: `${path.resolve('dist')}/_locales`
           }
         ]
       }

@@ -1,0 +1,17 @@
+{
+  "extension_name": {
+    "message": "Twitter Helper"
+  },
+  "extension_description": {
+    "message": "Quick Block Users and Comment, Remove Ads, Hidden Robot Reply"
+  },
+  "showQuickBlockButton": {
+    "message": "Show Quick Block Buttons"
+  },
+  "hiddenAIRobotReply": {
+    "message": "Hidden AI Robot Reply"
+  },
+  "hiddenPromotedInfo": {
+    "message": "Remove Ads"
+  }
+}

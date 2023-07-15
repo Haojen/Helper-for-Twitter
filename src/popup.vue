@@ -38,15 +38,15 @@ a {
             <span style="color: grey;">Version: 0.1.0</span>
         </header>
         <section>
-            <span>显示一键 Block 按钮</span>
+            <span v-text="i18n_showQuickBlockButton"></span>
             <input type="checkbox" v-model="config.quickBlockTweet">
         </section>
         <section>
-            <span>隐藏机器人回复</span>
+            <span v-text="i18n_hiddenAIRobotReply"></span>
             <input type="checkbox" v-model="config.hiddenAIBotTweet">
         </section>
         <section>
-            <span>隐藏推广信息</span>
+            <span v-text="i18n_hiddenPromotedInfo"></span>
             <input type="checkbox" v-model="config.hiddenPromotedTweet">
         </section>
         <footer style="margin-top: 20px;">
@@ -74,7 +74,14 @@ export default defineComponent({
             chrome.storage.sync.set(change)
         })
 
-        return {config}
+        // console.log(chrome.i18n, 'i18n')
+
+        return {
+            config,
+            i18n_showQuickBlockButton: chrome.i18n.getMessage('showQuickBlockButton'),
+            i18n_hiddenAIRobotReply: chrome.i18n.getMessage('hiddenAIRobotReply'),
+            i18n_hiddenPromotedInfo: chrome.i18n.getMessage('hiddenPromotedInfo'),
+        }
     }
 })
 

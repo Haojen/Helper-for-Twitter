@@ -1,10 +1,18 @@
 {
     "manifest_version": 3,
-    "name": "Twtter-Green-Plugs",
-    "description": "chrome extension",
+    "name": "__MSG_extension_name__",
+    "description": "__MSG_extension_description__",
+    "default_locale": "en",
     "version": "0.1.0",
     "action": {
         "default_popup": "popup.html"
+    },
+    "icons": {
+        "48": "Twitter-Helper-48.png",
+        "96": "Twitter-Helper-96.png",
+        "128": "Twitter-Helper-128.png",
+        "256": "Twitter-Helper-256.png",
+        "512": "Twitter-Helper-512.png"
     },
     "content_scripts": [
         {
