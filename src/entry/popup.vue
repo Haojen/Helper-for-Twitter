@@ -1,13 +1,16 @@
 <style scoped>
 .app {
     font-family: "Avenir", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
     margin: 20px;
 
     width: 200px;
+}
+
+span {
+    font-size: 12px;
+    font-weight: bold;
 }
 
 section {
@@ -28,6 +31,7 @@ section {
 }
 
 a {
+    color: royalblue;
     text-decoration: none;
 }
 </style>
@@ -49,7 +53,7 @@ a {
             <span v-text="i18n_hiddenPromotedInfo"></span>
             <input type="checkbox" v-model="config.hiddenPromotedTweet">
         </section>
-        <footer style="margin-top: 20px;">
+        <footer style="margin-top: 20px; font-size: 13px">
             <a href="https://github.com/haojen">Github</a>
             <a style="margin: 0 8px;" href="https://github.com/haojen">Feedback</a>
             <a href="https://github.com/haojen">Privacy</a>

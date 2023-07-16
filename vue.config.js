@@ -1,33 +1,19 @@
 const path = require('path')
-const fs = require('fs')
-
-// Generate pages object
-const pages = {}
-
-function getEntryFile (entryPath) {
-  let files = fs.readdirSync(entryPath)
-  return files
-}
-
-const chromeName = getEntryFile(path.resolve(`src/entry`))
-
-function getFileExtension (filename) {
-  return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : undefined
-}
-chromeName.forEach((name) => {
-  const fileExtension = getFileExtension(name)
-  const fileName = name.replace('.' + fileExtension, '')
-  pages[fileName] = {
-    entry: `src/entry/${name}`,
-    template: 'public/index.html',
-    filename: `${fileName}.html`
-  }
-})
 
 const isDevMode = process.env.NODE_ENV === 'development'
+const distFolder = path.resolve('/Users/haojen/Documents/Code/Twitter-Helper-Safari/Shared (Extension)/Resources')
 
 module.exports = {
-  pages,
+  pages: {
+    content: {
+      entry: 'src/entry/content.ts',
+    },
+    popup: {
+      entry: 'src/entry/popup.ts',
+      template: 'public/popup.html'
+    }
+  },
+  outputDir: distFolder,
   filenameHashing: false,
   chainWebpack: (config) => {
     config.plugin('copy').use(require('copy-webpack-plugin'), [
@@ -35,15 +21,15 @@ module.exports = {
         patterns: [
           {
             from: path.resolve(`src/manifest.${process.env.NODE_ENV}.json`),
-            to: `${path.resolve('dist')}/manifest.json`
+            to: `${distFolder}/manifest.json`
           },
           {
-            from: path.resolve(`public/`),
-            to: `${path.resolve('dist')}/`
+            from: path.resolve(`images/`),
+            to: `${distFolder}/images`
           },
           {
             from: path.resolve('_locales/'),
-            to: `${path.resolve('dist')}/_locales`
+            to: `${distFolder}/_locales`
           }
         ]
       }

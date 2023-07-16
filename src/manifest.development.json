@@ -5,14 +5,22 @@
     "default_locale": "en",
     "version": "0.1.0",
     "action": {
-        "default_popup": "popup.html"
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "images/extension-icon-16.png",
+            "19": "images/extension-icon-19.png",
+            "32": "images/extension-icon-32.png",
+            "38": "images/extension-icon-38.png",
+            "48": "images/extension-icon-48.png",
+            "72": "images/extension-icon-72.png"
+        }
     },
     "icons": {
-        "48": "Twitter-Helper-48.png",
-        "96": "Twitter-Helper-96.png",
-        "128": "Twitter-Helper-128.png",
-        "256": "Twitter-Helper-256.png",
-        "512": "Twitter-Helper-512.png"
+        "48": "images/extension-icon-48.png",
+        "96": "images/extension-icon-96.png",
+        "128": "images/extension-icon-128.png",
+        "256": "images/extension-icon-256.png",
+        "512": "images/extension-icon-512.png"
     },
     "content_scripts": [
         {
@@ -30,7 +38,7 @@
     ],
     "web_accessible_resources": [
         {
-            "resources": ["block.svg"],
+            "resources": ["images/block.svg"],
             "matches": ["*://twitter.com/*"]
         }
     ]

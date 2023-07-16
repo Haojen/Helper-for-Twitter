@@ -80,7 +80,7 @@ export class QuickBlockTweet extends TweetFilter {
         }
 
         const img = document.createElement('img')
-        img.src = chrome.runtime.getURL("block.svg")
+        img.src = chrome.runtime.getURL("images/block.svg")
         img.width = 18
         img.height = 18
 
