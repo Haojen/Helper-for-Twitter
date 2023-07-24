@@ -3,21 +3,22 @@
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     text-align: center;
     color: #2c3e50;
-    margin: 20px;
+    margin: 14px;
+}
 
-    width: 200px;
+section {
+    margin: 12px 0;
+    text-align: left;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
 }
 
 span {
     font-size: 12px;
     font-weight: bold;
-}
-
-section {
-    margin: 12px 0;
-
-    display: flex;
-    justify-content: space-between;
 }
 
 .fade-enter-active,
