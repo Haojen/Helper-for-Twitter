@@ -13,5 +13,8 @@
   },
   "hiddenPromotedInfo": {
     "message": "隐藏推广信息"
+  },
+  "foldScamImages": {
+    "message": "折叠评论内色情图"
   }
 }

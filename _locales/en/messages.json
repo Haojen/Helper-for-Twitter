@@ -13,5 +13,8 @@
   },
   "hiddenPromotedInfo": {
     "message": "Remove Ads"
+  },
+  "foldScamImages": {
+    "message": "Fold Scam Images"
   }
 }

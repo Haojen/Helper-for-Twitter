@@ -38,7 +38,10 @@
     ],
     "web_accessible_resources": [
         {
-            "resources": ["images/block.svg"],
+            "resources": [
+                "images/block.svg",
+                "images/eyes.svg"
+            ],
             "matches": ["*://twitter.com/*"]
         }
     ]

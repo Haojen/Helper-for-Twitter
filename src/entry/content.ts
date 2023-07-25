@@ -1,5 +1,11 @@
 import {defaultStaticConfig, getDefaultStaticConfig, IDefaultStaticConfigKeys} from "@/shared.config";
-import {HiddenAIBotTweet, HiddenPromotedTweet, IFeatures, QuickBlockTweet} from "@/entry/content.features";
+import {
+    AutoHiddenReTweetReplyImg,
+    HiddenAIBotTweet,
+    HiddenPromotedTweet,
+    IFeatures,
+    QuickBlockTweet
+} from "@/entry/content.features";
 
 export class HelperKit {
     config: typeof defaultStaticConfig
@@ -9,7 +15,8 @@ export class HelperKit {
         this.features = {
             quickBlockTweet: new QuickBlockTweet(),
             hiddenAIBotTweet: new HiddenAIBotTweet(),
-            hiddenPromotedTweet: new HiddenPromotedTweet()
+            hiddenPromotedTweet: new HiddenPromotedTweet(),
+            autoHiddenReTweetReplyImg: new AutoHiddenReTweetReplyImg()
         }
     }
 

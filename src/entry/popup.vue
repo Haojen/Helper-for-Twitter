@@ -54,6 +54,10 @@ a {
             <span v-text="i18n_hiddenPromotedInfo"></span>
             <input type="checkbox" v-model="config.hiddenPromotedTweet">
         </section>
+        <section>
+            <span v-text="i18n_foldScamImages"></span>
+            <input type="checkbox" v-model="config.autoHiddenReTweetReplyImg">
+        </section>
         <footer style="margin-top: 20px; font-size: 13px">
             <a href="https://github.com/haojen">Github</a>
             <a style="margin: 0 8px;" href="https://github.com/haojen">Feedback</a>
@@ -86,6 +90,7 @@ export default defineComponent({
             i18n_showQuickBlockButton: chrome.i18n.getMessage('showQuickBlockButton'),
             i18n_hiddenAIRobotReply: chrome.i18n.getMessage('hiddenAIRobotReply'),
             i18n_hiddenPromotedInfo: chrome.i18n.getMessage('hiddenPromotedInfo'),
+            i18n_foldScamImages: chrome.i18n.getMessage('foldScamImages'),
         }
     }
 })
