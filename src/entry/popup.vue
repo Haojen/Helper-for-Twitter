@@ -13,7 +13,6 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
 }
 
 span {
@@ -31,8 +30,11 @@ span {
     opacity: 0;
 }
 
-a {
+div[role="link"] {
+    display: inline-block;
+
     color: royalblue;
+    cursor: pointer;
     text-decoration: none;
 }
 </style>
@@ -59,9 +61,9 @@ a {
             <input type="checkbox" v-model="config.foldCommentPornImage">
         </section>
         <footer style="margin-top: 20px; font-size: 13px">
-            <a href="https://github.com/haojen">Github</a>
-            <a style="margin: 0 8px;" href="https://github.com/haojen">Feedback</a>
-            <a href="https://github.com/haojen">Privacy</a>
+            <div role="link" @click="openNewTab(0)">Github</div>
+            <div role="link" @click="openNewTab(1)" style="margin: 0 8px;">Feedback</div>
+            <div role="link" @click="openNewTab(2)">Privacy</div>
         </footer>
     </main>
 </template>
@@ -84,9 +86,21 @@ export default defineComponent({
         })
 
         // console.log(chrome.i18n, 'i18n')
+        function openNewTab(id: number) {
+            const links = [
+                "https://github.com/Haojen/Helper-for-Twitter",
+                "https://github.com/Haojen/Helper-for-Twitter/issues",
+                "https://haojen.github.io/Helper-for-Twitter-Website/#/privacy"
+            ]
+
+            chrome.tabs.create({
+                url: links[id]
+            })
+        }
 
         return {
             config,
+            openNewTab,
             i18n_showQuickBlockButton: chrome.i18n.getMessage('showQuickBlockButton'),
             i18n_hiddenAIRobotReply: chrome.i18n.getMessage('hiddenAIRobotReply'),
             i18n_hiddenPromotedInfo: chrome.i18n.getMessage('hiddenPromotedInfo'),
