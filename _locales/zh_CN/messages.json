@@ -3,7 +3,7 @@
     "message": "推特助手"
   },
   "extension_description": {
-    "message": "一键 Block 用户和评论, 广告过滤, 屏蔽机器人回复"
+    "message": "一键 Block / 过滤色情和推广内容 / 屏蔽机器人回复"
   },
   "showQuickBlockButton": {
     "message": "显示一键 Block 按钮"

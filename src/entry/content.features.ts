@@ -52,7 +52,7 @@ class TweetFilter implements IFeatures {
     }
 }
 
-export class AutoHiddenReTweetReplyImg extends TweetFilter {
+export class FoldCommentPornImage extends TweetFilter {
     INSET_BUTTON_FLAG = 'HIDDEN_RETWEET_REPLY_IMG_BUTTON'
     getIcon(el: HTMLElement) {
         return el.querySelectorAll('div[aria-haspopup="menu"][role="button"] svg path')
@@ -104,7 +104,6 @@ export class AutoHiddenReTweetReplyImg extends TweetFilter {
 
         button.onclick = () => {
             imgList.forEach( linkItem => {
-                console.log(linkItem.style.height)
                 linkItem.style.height === '0px' || !linkItem.style.height ? linkItem.style.height = 'auto' : linkItem.style.height = '0'
             })
         }

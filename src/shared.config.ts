@@ -1,9 +1,9 @@
-export type IDefaultStaticConfigKeys = 'quickBlockTweet' | 'hiddenPromotedTweet' | 'hiddenAIBotTweet' | 'autoHiddenReTweetReplyImg'
+export type IDefaultStaticConfigKeys = 'quickBlockTweet' | 'hiddenPromotedTweet' | 'hiddenAIBotTweet' | 'foldCommentPornImage'
 export const defaultStaticConfig:{[p in IDefaultStaticConfigKeys]: boolean } = {
     quickBlockTweet: true,
     hiddenAIBotTweet: false,
     hiddenPromotedTweet: false,
-    autoHiddenReTweetReplyImg: true
+    foldCommentPornImage: true
 }
 
 export function getDefaultStaticConfig() {

@@ -1,6 +1,6 @@
 import {defaultStaticConfig, getDefaultStaticConfig, IDefaultStaticConfigKeys} from "@/shared.config";
 import {
-    AutoHiddenReTweetReplyImg,
+    FoldCommentPornImage,
     HiddenAIBotTweet,
     HiddenPromotedTweet,
     IFeatures,
@@ -16,7 +16,7 @@ export class HelperKit {
             quickBlockTweet: new QuickBlockTweet(),
             hiddenAIBotTweet: new HiddenAIBotTweet(),
             hiddenPromotedTweet: new HiddenPromotedTweet(),
-            autoHiddenReTweetReplyImg: new AutoHiddenReTweetReplyImg()
+            foldCommentPornImage: new FoldCommentPornImage()
         }
     }
 

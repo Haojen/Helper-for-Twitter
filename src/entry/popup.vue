@@ -56,7 +56,7 @@ a {
         </section>
         <section>
             <span v-text="i18n_foldScamImages"></span>
-            <input type="checkbox" v-model="config.autoHiddenReTweetReplyImg">
+            <input type="checkbox" v-model="config.foldCommentPornImage">
         </section>
         <footer style="margin-top: 20px; font-size: 13px">
             <a href="https://github.com/haojen">Github</a>
