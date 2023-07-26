@@ -42,7 +42,7 @@ div[role="link"] {
     <main class="app">
         <header style="margin-bottom: 24px;">
             <h2 style="margin: 0">Twitter Helper</h2>
-            <span style="color: grey;">Version: 0.1.0</span>
+            <span style="color: grey;">Version: {{manifest.version}}</span>
         </header>
         <section>
             <span v-text="i18n_showQuickBlockButton"></span>
@@ -71,6 +71,7 @@ div[role="link"] {
 <script lang="ts">
 import {defineComponent, reactive, watch} from "vue";
 import {getDefaultStaticConfig} from "@/shared.config";
+import manifest from "@/manifest.production.json"
 
 export default defineComponent({
     name: "PopupView",
@@ -100,6 +101,7 @@ export default defineComponent({
 
         return {
             config,
+            manifest,
             openNewTab,
             i18n_showQuickBlockButton: chrome.i18n.getMessage('showQuickBlockButton'),
             i18n_hiddenAIRobotReply: chrome.i18n.getMessage('hiddenAIRobotReply'),
