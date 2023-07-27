@@ -3,7 +3,9 @@
 </div>
 
 <div align="center">
-    <img src="./chrome-webstore.svg" alt="" height="54">
+    <a href="https://chrome.google.com/webstore/detail/%E6%8E%A8%E7%89%B9%E5%8A%A9%E6%89%8B/bfliajokeloclanhljkkahefonnphilj">
+        <img src="./chrome-webstore.svg" alt="" height="54">
+    </a>
 </div>
 
 <div align="center">
