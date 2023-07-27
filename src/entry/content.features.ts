@@ -57,7 +57,7 @@ export class FoldCommentPornImage extends TweetFilter {
     getIcon(el: HTMLElement) {
         return el.querySelectorAll('div[aria-haspopup="menu"][role="button"] svg path')
     }
-    addButtonToggleImgVisible(el: HTMLElement, allImgLink: NodeListOf<HTMLElement>) {
+    addButtonToggleImgVisible(el: HTMLElement, filterImgParent: HTMLElement) {
         const sharedTweetIcon = `M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z`
 
         const sharedTweetIconEl = findButtonByIconPath(this.getIcon(el), sharedTweetIcon)
@@ -66,16 +66,15 @@ export class FoldCommentPornImage extends TweetFilter {
 
         if (!sharedTweetIconEl || button) return;
 
-        sharedTweetIconEl.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.appendChild(this.createCustomMenuBottom(allImgLink))
+        sharedTweetIconEl.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.appendChild(this.createCustomMenuBottom(filterImgParent))
     }
-    createCustomMenuBottom(imgList: NodeListOf<HTMLElement>): HTMLElement {
+    createCustomMenuBottom(restoreImageContainer: HTMLElement): HTMLElement {
         const button = document.createElement('div')
         button.setAttribute('role', 'button')
         button.title = 'Show Images'
         button.className = this.INSET_BUTTON_FLAG
 
-        button.style.width = '33px'
-        button.style.height = '33px'
+        button.style.height = button.style.width = '33px'
         button.style.margin = '-8px 0'
         button.style.borderRadius = '50%'
         button.style.display = 'inline-grid'
@@ -92,8 +91,7 @@ export class FoldCommentPornImage extends TweetFilter {
 
         const img = document.createElement('img')
         img.src = chrome.runtime.getURL("images/eyes.svg")
-        img.width = 18
-        img.height = 18
+        img.height = img.width = 18
 
         button.appendChild(img)
 
@@ -103,13 +101,18 @@ export class FoldCommentPornImage extends TweetFilter {
         // button.appendChild(span)
 
         button.onclick = () => {
-            imgList.forEach( linkItem => {
-                linkItem.style.height === '0px' || !linkItem.style.height ? linkItem.style.height = '100%' : linkItem.style.height = '0'
-            })
+            restoreImageContainer.style.height === '0px' ?
+            restoreImageContainer.style.height = '100%' :
+            restoreImageContainer.style.height = '0'
         }
         return button
     }
 
+    getMachtedFilterTargetItem(target: HTMLElement): HTMLElement | undefined {
+        return target.parentElement?.parentElement?.parentElement?.parentElement?.parentElement || undefined
+    }
+
+    PORN_IMG_CONTAINER_FLAG = 'PORN_IMG_CONTAINER_FLAG'
     watchNewTweet = () => {
         if (window.location.pathname === "/home") return
 
@@ -126,16 +129,18 @@ export class FoldCommentPornImage extends TweetFilter {
             const matchRetweet = tweetItem.querySelector('div[role="link"][tabindex="0"]')
             if (!matchRetweet) return
 
-            const PORN_IMG_FLAG = "PORN_IMG_FLAG"
-            const photoContainer:NodeListOf<HTMLElement>= tweetItem.querySelectorAll(`a[href*="/photo/"]:not(.${PORN_IMG_FLAG})`)
 
-            if (photoContainer.length == 0) return;
+            const targetImgEl: HTMLElement | null = tweetItem.querySelector(`a[href*="/photo/"]:not(.${this.PORN_IMG_CONTAINER_FLAG})`)
 
-            photoContainer.forEach(linkItem => {
-                linkItem.classList.add(PORN_IMG_FLAG)
-                linkItem.style.height = "0"
-            })
-            this.addButtonToggleImgVisible(tweetItem, photoContainer)
+            if (!targetImgEl) return;
+
+            targetImgEl.classList.add(this.PORN_IMG_CONTAINER_FLAG)
+
+            const targetContainer = this.getMachtedFilterTargetItem(targetImgEl)
+            if (!targetContainer) return;
+
+            targetContainer.style.height = "0"
+            this.addButtonToggleImgVisible(tweetItem, targetContainer)
         })
     }
 
@@ -145,6 +150,10 @@ export class FoldCommentPornImage extends TweetFilter {
         (document.body.querySelectorAll(`.${this.INSET_BUTTON_FLAG}`) as NodeListOf<HTMLElement>).forEach( (item) => {
             item.click()
             item.remove()
+        })
+
+        document.body.querySelectorAll(`.${this.PORN_IMG_CONTAINER_FLAG}`).forEach( markedItem => {
+            markedItem.classList.remove(this.PORN_IMG_CONTAINER_FLAG)
         })
     }
 }
