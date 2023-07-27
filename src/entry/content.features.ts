@@ -54,21 +54,109 @@ class TweetFilter implements IFeatures {
 
 export class FoldCommentPornImage extends TweetFilter {
     INSET_BUTTON_FLAG = 'HIDDEN_RETWEET_REPLY_IMG_BUTTON'
+    PORN_IMG_TWEET_FLAG = 'porn-img-tweet-falg'
+    PORN_IMG_CONTAINER_FLAG = 'porn-img-container-flag'
+
+    addButtonToggleImgVisible(tweetItem: HTMLElement) {
+        const sharedTweetIcon = `M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z`
+
+        const sharedTweetIconEl = findButtonByIconPath(this.getIcon(tweetItem), sharedTweetIcon)
+
+        const hasButton = tweetItem.querySelector(`.${this.INSET_BUTTON_FLAG}`)
+
+        if (!sharedTweetIconEl || hasButton) return;
+
+        const button = this.createCustomMenuBottom(() => {
+            (tweetItem.querySelectorAll(`[${this.PORN_IMG_CONTAINER_FLAG}="1"]`) as NodeListOf<HTMLElement>).forEach( containerItem => {
+                containerItem.style.height === '0px' ?
+                containerItem.style.height = '100%' :
+                containerItem.style.height = '0'
+            })
+        })
+
+        sharedTweetIconEl.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.appendChild(button)
+    }
+
+    watchNewTweet = () => {
+        if (window.location.pathname === "/home") return
+
+        const allTweets:NodeListOf<HTMLElement> = document.querySelectorAll(`article[data-testid="tweet"]`)
+
+        allTweets.forEach( (tweetItem, idx) => {
+            if (idx === 0) return;
+
+            if (tweetItem.getAttribute(this.PORN_IMG_TWEET_FLAG) === "1") return;
+            tweetItem.setAttribute(this.PORN_IMG_TWEET_FLAG, "1")
+
+            // Keep the userId query
+            // const userId = tweetItem.querySelector('div[data-testid="User-Name"] a[tabindex="-1"][role="link"] span')
+            const matchChineseLanguage = tweetItem.querySelector('div[lang="zh"]')
+            const matchRetweet = tweetItem.querySelector('div[role="link"][tabindex="0"]')
+            const photo1 = tweetItem.querySelector('a[href$="/photo/1"]')
+
+            if (!matchChineseLanguage && matchRetweet && photo1 && matchRetweet.contains(photo1)) {
+                return;
+            }
+
+            if (!matchRetweet) return
+
+            const photos:NodeListOf<HTMLElement> = tweetItem.querySelectorAll('a[href$="/photo/1"]')
+
+            if (photos.length === 0) return;
+
+            const MAIN_IMG_PARENT_REPEAT = 3
+            const RETWEET_IMG_PARENT_REPEAT = 5
+            if (photos.length === 1) {
+                const isRetweetImg = matchRetweet.contains(photos[0])
+                this.hiddenImgFromContainer(photos[0], isRetweetImg ? RETWEET_IMG_PARENT_REPEAT: MAIN_IMG_PARENT_REPEAT)
+            }
+            else if (photos.length === 2) {
+                this.hiddenImgFromContainer(photos[0], MAIN_IMG_PARENT_REPEAT)
+                this.hiddenImgFromContainer(photos[1], RETWEET_IMG_PARENT_REPEAT)
+            }
+
+            this.addButtonToggleImgVisible(tweetItem)
+        })
+    }
+    hiddenImgFromContainer(childEl: HTMLElement, searchLevel: number) {
+        const container = this.getParentElementByRepeat(childEl, searchLevel)
+
+        if (container) {
+            container.style.height = "0"
+            container.setAttribute(this.PORN_IMG_CONTAINER_FLAG, "1")
+        }
+    }
+
+    destroy() {
+        super.destroy();
+
+        (document.body.querySelectorAll(`.${this.INSET_BUTTON_FLAG}`) as NodeListOf<HTMLElement>).forEach( (item) => {
+            item.click()
+            item.remove()
+        })
+
+        document.body.querySelectorAll(`[${this.PORN_IMG_TWEET_FLAG}="1"]`).forEach(item => {
+            item.setAttribute(this.PORN_IMG_TWEET_FLAG, "0")
+
+            item.querySelectorAll(`[${this.PORN_IMG_CONTAINER_FLAG}="1"]`).forEach(item => {
+                item.setAttribute(this.PORN_IMG_CONTAINER_FLAG, "0")
+            })
+        })
+    }
+
     getIcon(el: HTMLElement) {
         return el.querySelectorAll('div[aria-haspopup="menu"][role="button"] svg path')
     }
-    addButtonToggleImgVisible(el: HTMLElement, filterImgParent: HTMLElement) {
-        const sharedTweetIcon = `M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z`
 
-        const sharedTweetIconEl = findButtonByIconPath(this.getIcon(el), sharedTweetIcon)
-
-        const button = el.querySelector(`.${this.INSET_BUTTON_FLAG}`)
-
-        if (!sharedTweetIconEl || button) return;
-
-        sharedTweetIconEl.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.appendChild(this.createCustomMenuBottom(filterImgParent))
+    getParentElementByRepeat(el: HTMLElement, count: number) {
+        let target = el
+        for (let i = 0; i < count; i++) {
+            target = target.parentElement!
+        }
+        return target
     }
-    createCustomMenuBottom(restoreImageContainer: HTMLElement): HTMLElement {
+
+    createCustomMenuBottom(callback: () => void): HTMLElement {
         const button = document.createElement('div')
         button.setAttribute('role', 'button')
         button.title = 'Show Images'
@@ -100,61 +188,9 @@ export class FoldCommentPornImage extends TweetFilter {
         // span.innerText = imgList.length.toString()
         // button.appendChild(span)
 
-        button.onclick = () => {
-            restoreImageContainer.style.height === '0px' ?
-            restoreImageContainer.style.height = '100%' :
-            restoreImageContainer.style.height = '0'
-        }
+        button.onclick = () => callback()
+
         return button
-    }
-
-    getMachtedFilterTargetItem(target: HTMLElement): HTMLElement | undefined {
-        return target.parentElement?.parentElement?.parentElement?.parentElement?.parentElement || undefined
-    }
-
-    PORN_IMG_CONTAINER_FLAG = 'PORN_IMG_CONTAINER_FLAG'
-    watchNewTweet = () => {
-        if (window.location.pathname === "/home") return
-
-        const allTweets:NodeListOf<HTMLElement> = document.querySelectorAll(`article[data-testid="tweet"]`)
-
-        allTweets.forEach( (tweetItem, idx) => {
-            if (idx === 0) return;
-            
-            // Keep the userId query
-            // const userId = tweetItem.querySelector('div[data-testid="User-Name"] a[tabindex="-1"][role="link"] span')
-            const matchLanguage = tweetItem.querySelectorAll('div[lang="zh"]')
-            if (matchLanguage.length === 0) return
-
-            const matchRetweet = tweetItem.querySelector('div[role="link"][tabindex="0"]')
-            if (!matchRetweet) return
-
-
-            const targetImgEl: HTMLElement | null = tweetItem.querySelector(`a[href*="/photo/"]:not(.${this.PORN_IMG_CONTAINER_FLAG})`)
-
-            if (!targetImgEl) return;
-
-            targetImgEl.classList.add(this.PORN_IMG_CONTAINER_FLAG)
-
-            const targetContainer = this.getMachtedFilterTargetItem(targetImgEl)
-            if (!targetContainer) return;
-
-            targetContainer.style.height = "0"
-            this.addButtonToggleImgVisible(tweetItem, targetContainer)
-        })
-    }
-
-    destroy() {
-        super.destroy();
-
-        (document.body.querySelectorAll(`.${this.INSET_BUTTON_FLAG}`) as NodeListOf<HTMLElement>).forEach( (item) => {
-            item.click()
-            item.remove()
-        })
-
-        document.body.querySelectorAll(`.${this.PORN_IMG_CONTAINER_FLAG}`).forEach( markedItem => {
-            markedItem.classList.remove(this.PORN_IMG_CONTAINER_FLAG)
-        })
     }
 }
 
