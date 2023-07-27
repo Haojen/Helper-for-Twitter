@@ -104,16 +104,20 @@ export class FoldCommentPornImage extends TweetFilter {
 
         button.onclick = () => {
             imgList.forEach( linkItem => {
-                linkItem.style.height === '0px' || !linkItem.style.height ? linkItem.style.height = 'auto' : linkItem.style.height = '0'
+                linkItem.style.height === '0px' || !linkItem.style.height ? linkItem.style.height = '100%' : linkItem.style.height = '0'
             })
         }
         return button
     }
 
     watchNewTweet = () => {
+        if (window.location.pathname === "/home") return
+
         const allTweets:NodeListOf<HTMLElement> = document.querySelectorAll(`article[data-testid="tweet"]`)
 
-        allTweets.forEach( tweetItem => {
+        allTweets.forEach( (tweetItem, idx) => {
+            if (idx === 0) return;
+            
             // Keep the userId query
             // const userId = tweetItem.querySelector('div[data-testid="User-Name"] a[tabindex="-1"][role="link"] span')
             const matchLanguage = tweetItem.querySelectorAll('div[lang="zh"]')
@@ -122,12 +126,13 @@ export class FoldCommentPornImage extends TweetFilter {
             const matchRetweet = tweetItem.querySelector('div[role="link"][tabindex="0"]')
             if (!matchRetweet) return
 
-            const photoContainer:NodeListOf<HTMLElement>= tweetItem.querySelectorAll('a[href*="/photo/"]')
+            const PORN_IMG_FLAG = "PORN_IMG_FLAG"
+            const photoContainer:NodeListOf<HTMLElement>= tweetItem.querySelectorAll(`a[href*="/photo/"]:not(.${PORN_IMG_FLAG})`)
 
             if (photoContainer.length == 0) return;
 
             photoContainer.forEach(linkItem => {
-                if (linkItem.style.height === "auto") return;
+                linkItem.classList.add(PORN_IMG_FLAG)
                 linkItem.style.height = "0"
             })
             this.addButtonToggleImgVisible(tweetItem, photoContainer)
@@ -136,7 +141,11 @@ export class FoldCommentPornImage extends TweetFilter {
 
     destroy() {
         super.destroy();
-        document.body.querySelectorAll(`.${this.INSET_BUTTON_FLAG}`).forEach( item => item.remove())
+
+        (document.body.querySelectorAll(`.${this.INSET_BUTTON_FLAG}`) as NodeListOf<HTMLElement>).forEach( (item) => {
+            item.click()
+            item.remove()
+        })
     }
 }
 
