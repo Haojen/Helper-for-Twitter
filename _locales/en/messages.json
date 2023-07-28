@@ -16,5 +16,8 @@
   },
   "foldScamImages": {
     "message": "Fold Scam Images"
+  },
+  "switchLogoToBlueBird": {
+    "message": "Switch Logo to Blue Bird"
   }
 }

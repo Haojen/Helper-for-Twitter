@@ -30,6 +30,10 @@ module.exports = {
           {
             from: path.resolve('_locales/'),
             to: `${distFolder}/_locales`
+          },
+          {
+            from: path.resolve('src/entry/content.css'),
+            to: `${distFolder}/content.css`
           }
         ]
       }

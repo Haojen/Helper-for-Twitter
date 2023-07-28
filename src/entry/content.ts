@@ -4,7 +4,7 @@ import {
     HiddenAIBotTweet,
     HiddenPromotedTweet,
     IFeatures,
-    QuickBlockTweet
+    QuickBlockTweet, SwitchLogoToBlueBird
 } from "@/entry/content.features";
 
 export class HelperKit {
@@ -16,7 +16,8 @@ export class HelperKit {
             quickBlockTweet: new QuickBlockTweet(),
             hiddenAIBotTweet: new HiddenAIBotTweet(),
             hiddenPromotedTweet: new HiddenPromotedTweet(),
-            foldCommentPornImage: new FoldCommentPornImage()
+            foldCommentPornImage: new FoldCommentPornImage(),
+            switchLogoToBlueBird: new SwitchLogoToBlueBird(),
         }
     }
 

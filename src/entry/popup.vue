@@ -60,6 +60,10 @@ div[role="link"] {
             <span v-text="i18n_foldScamImages"></span>
             <input type="checkbox" v-model="config.foldCommentPornImage">
         </section>
+        <section>
+            <span v-text="i18n_switchLogoToBlueBird"></span>
+            <input type="checkbox" v-model="config.switchLogoToBlueBird">
+        </section>
         <footer style="margin-top: 20px; font-size: 13px">
             <div role="link" @click="openNewTab(0)">Github</div>
             <div role="link" @click="openNewTab(1)" style="margin: 0 8px;">Feedback</div>
@@ -107,6 +111,7 @@ export default defineComponent({
             i18n_hiddenAIRobotReply: chrome.i18n.getMessage('hiddenAIRobotReply'),
             i18n_hiddenPromotedInfo: chrome.i18n.getMessage('hiddenPromotedInfo'),
             i18n_foldScamImages: chrome.i18n.getMessage('foldScamImages'),
+            i18n_switchLogoToBlueBird: chrome.i18n.getMessage('switchLogoToBlueBird')
         }
     }
 })

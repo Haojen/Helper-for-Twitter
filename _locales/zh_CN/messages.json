@@ -16,5 +16,8 @@
   },
   "foldScamImages": {
     "message": "折叠评论内色情图"
+  },
+  "switchLogoToBlueBird": {
+    "message": "切换回老版 Logo"
   }
 }
