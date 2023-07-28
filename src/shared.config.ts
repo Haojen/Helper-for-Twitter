@@ -9,7 +9,7 @@ export const defaultStaticConfig:{[p in IDefaultStaticConfigKeys]: boolean } = {
     hiddenAIBotTweet: false,
     hiddenPromotedTweet: false,
     foldCommentPornImage: true,
-    switchLogoToBlueBird: true
+    switchLogoToBlueBird: false
 }
 
 export function getDefaultStaticConfig() {
