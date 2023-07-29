@@ -7,7 +7,7 @@
 </div>
 
 ## Changelog
-Add Change Logo x to Blue bird
+Add Change Logo X to Bluebird
 
 <h2>About</h2>
 Copyright © Haojen 2022
