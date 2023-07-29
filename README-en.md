@@ -6,5 +6,8 @@
     <span>English</span> | <a href="/README.md">中文</a>
 </div>
 
+## Changelog
+Add Change Logo x to Blue bird
+
 <h2>About</h2>
 Copyright © Haojen 2022
