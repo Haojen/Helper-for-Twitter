@@ -15,6 +15,12 @@
     <span>English</span> | <a href="/README.md">中文</a>
 </div>
 
+## Features
+- Change Twitter Logo from X to Bluebird
+- Filter Tweet comment ads and adult content 
+- Remove Ads 
+- Quick Block User Current User
+
 ## Changelog
 Add Change Logo X to Bluebird
 
