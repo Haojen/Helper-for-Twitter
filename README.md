@@ -15,6 +15,12 @@
     <span>中文</span> | <a href="/README-en.md">English</a>
 </div>
 
+## 功能
+- 更换Logo图标, X 改成小蓝鸟
+- 过滤评论区的色情诈骗图
+- 去广告和机器人回复
+- 一键快速 Block 用户
+
 ## Changelog
 
 ### Version 0.3.0
